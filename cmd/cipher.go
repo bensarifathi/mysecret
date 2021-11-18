@@ -22,7 +22,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/Fathi-BENSARI/mysecret/utils"
 	"github.com/spf13/cobra"
@@ -60,7 +59,7 @@ func init() {
 func addKey() {
 	// grab user input
 	var key string
-	var backend = os.Getenv("BACKEND")
+	var backend = "https://my-secret-store.herokuapp.com"
 	var url string = backend + "/passphrase"
 	// gather information
 	fmt.Printf("Insert secret key: ")

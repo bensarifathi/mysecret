@@ -16,17 +16,8 @@ limitations under the License.
 package main
 
 import (
-	"log"
-
 	"github.com/Fathi-BENSARI/mysecret/cmd"
-	"github.com/joho/godotenv"
 )
-
-func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Print("No .env file found")
-	}
-}
 
 func main() {
 	cmd.Execute()

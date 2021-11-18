@@ -22,7 +22,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/Fathi-BENSARI/mysecret/utils"
 	"github.com/howeyc/gopass"
@@ -61,7 +60,7 @@ func init() {
 func store() {
 	// grab user input
 	var name, email string
-	var backend = os.Getenv("BACKEND")
+	var backend = "https://my-secret-store.herokuapp.com"
 	var url = backend + "/store"
 	fmt.Printf("Name: ")
 	fmt.Scanln(&name)
