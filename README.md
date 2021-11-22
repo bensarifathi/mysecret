@@ -26,7 +26,7 @@ $ mysecret fetch
 Name: github
 =============================================================
 Name      Email                                   Password  
-instagram <myemail>                              <mypassword>  
+github    <myemail>                              <mypassword>  
 
 ```
 
