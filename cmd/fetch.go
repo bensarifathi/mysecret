@@ -22,18 +22,30 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/Fathi-BENSARI/mysecret/utils"
 	"github.com/spf13/cobra"
 )
 
+var all bool
+
 // fetchCmd represents the fetch command
 var fetchCmd = &cobra.Command{
 	Use:   "fetch",
-	Short: "query an account",
-	Long:  `query an account stored in the db and return it's correspending credentials`,
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fetchAccount()
+		if all {
+			fetchAll()
+		} else {
+			fetchAccount()
+		}
 	},
 }
 
@@ -48,7 +60,8 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// fetchCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	fetchCmd.Flags().BoolVarP(&all, "all", "a", false,
+		"fetch all accounts related to the logged in user")
 }
 
 func fetchAccount() {
@@ -62,7 +75,7 @@ func fetchAccount() {
 		log.Fatal(err)
 	}
 	// setup http client and url
-	var backend = "https://my-secret-store.herokuapp.com"
+	var backend = os.Getenv("BACKEND")
 	url = backend + "/store/info"
 	c := utils.NewHttpClient(10)
 	form := &utils.Account{
@@ -84,4 +97,28 @@ func fetchAccount() {
 		log.Fatalf("[!] error while parsing response data (%s)", err)
 	}
 	fmt.Println(form)
+}
+
+func fetchAll() {
+	// grab user info
+	user, err := utils.GetUserFromFile()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// setup http client and url
+	var backend = os.Getenv("BACKEND")
+	url := backend + "/store/all"
+	c := utils.NewHttpClient(10)
+	data, _ := json.Marshal(user)
+	resp, err := c.Post(url, "application/json", bytes.NewBuffer(data))
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	if resp.StatusCode != http.StatusOK {
+		fmt.Printf("error (%s)\n", body)
+		return
+	}
+	fmt.Println(string(body))
 }
