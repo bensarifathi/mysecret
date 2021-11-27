@@ -22,7 +22,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/Fathi-BENSARI/mysecret/utils"
 	"github.com/spf13/cobra"
@@ -75,7 +74,7 @@ func fetchAccount() {
 		log.Fatal(err)
 	}
 	// setup http client and url
-	var backend = os.Getenv("BACKEND")
+	var backend = "https://my-secret-store.herokuapp.com"
 	url = backend + "/store/info"
 	c := utils.NewHttpClient(10)
 	form := &utils.Account{
@@ -106,7 +105,7 @@ func fetchAll() {
 		log.Fatal(err)
 	}
 	// setup http client and url
-	var backend = os.Getenv("BACKEND")
+	var backend = "https://my-secret-store.herokuapp.com"
 	url := backend + "/store/all"
 	c := utils.NewHttpClient(10)
 	data, _ := json.Marshal(user)
